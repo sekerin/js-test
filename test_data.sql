@@ -56,3 +56,5 @@ INSERT INTO `subscription` VALUES
 
 ALTER TABLE account ADD COLUMN network_id int(11);
 ALTER TABLE account ADD COLUMN subscribers_count int(11) DEFAULT 0 NOT NULL;
+
+CREATE INDEX account_network_id ON account (network_id);
