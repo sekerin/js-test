@@ -13,7 +13,8 @@ services:
       DB_PASSWORD: 12345
       DB_NAME: mydb
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   mysql:
     image: mysql
@@ -24,5 +25,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 12345
       MYSQL_DATABASE: mydb
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
     volumes:
       - ./test_data.sql:/docker-entrypoint-initdb.d/test_data.sql
