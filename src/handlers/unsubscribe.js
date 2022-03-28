@@ -24,7 +24,7 @@ async function unsubscribe(repo, sub) {
 
   calculated.forEach((it, index) => it.forEach((item) => {
     promices.push(repo.updateSubBalance(
-      { ...item, network_id: index === 0 ? network_id : network_id_next + index - 1 },
+      { ...item, network_id: index === 0 ? network_id : network_id_next.network_id + index - 1 },
     ));
   }));
 

@@ -4,6 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "elastic-apm-node": "^3.31.0",
+    "elastic-apm-node-opentracing": "^2.0.1",
     "express": "^4.17.3",
     "json-bigint": "^1.0.0",
     "mysql": "^2.18.1"

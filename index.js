@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const JSONbig = require('json-bigint')({ useNativeBigInt: true });
+const { tracer } = require('./src/metrics');
 
 const { calculate } = require('./src/handlers/calculate');
 const { raiting } = require('./src/handlers/raiting');
@@ -35,39 +36,51 @@ app.use(jsonParser());
 const port = process.env.PORT || 3000;
 
 app.get('/calc', (req, res) => {
+  const span = tracer.startSpan('calc');
   calculate(repo).then((rs) => {
     res.json(rs);
   }).catch((error) => {
     console.log(error);
     res.status(500).send('Something broke!');
+  }).finally(() => {
+    span.finish();
   });
 });
 
 app.get('/rating', (req, res) => {
+  const span = tracer.startSpan('rating');
   raiting(repo).then((rs) => {
     res.setHeader('content-type', 'application/json; charset=utf-8');
     res.send(JSONbig.stringify(rs));
   }).catch((error) => {
     console.log(error);
     res.status(500).send('Something broke!');
+  }).finally(() => {
+    span.finish();
   });
 });
 
 app.post('/subscribe', (req, res) => {
+  const span = tracer.startSpan('subscribe');
   subscribe(repo, req.body).then((rs) => {
     res.json(rs);
   }).catch((error) => {
     console.log(error);
     res.status(500).send('Something broke!');
+  }).finally(() => {
+    span.finish();
   });
 });
 
 app.post('/unsubscribe', (req, res) => {
+  const span = tracer.startSpan('unsubscribe');
   unsubscribe(repo, req.body).then((rs) => {
     res.json(rs);
   }).catch((error) => {
     console.log(error);
     res.status(500).send('Something broke!');
+  }).finally(() => {
+    span.finish();
   });
 });
 
