@@ -9,14 +9,15 @@ const { subscribe } = require('./src/handlers/subscribe');
 const { unsubscribe } = require('./src/handlers/unsubscribe');
 const { Repository } = require('./src/repositories/repository');
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
+  connectionLimit: 10,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   supportBigNumbers: true,
 });
-connection.connect();
+
 const repo = new Repository(connection);
 
 const app = express();
